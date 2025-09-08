@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I Love You 💘</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet" />
+<title>I Love You & I Hate You</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
 <style>
 body {
   margin: 0;
@@ -16,35 +16,35 @@ body {
   position: relative;
 }
 h1 { 
-  font-size: 50px; /* Medium size heading */
+  font-size: 50px; 
   color: #fff; 
   margin-top: 20px; 
   text-shadow: 0 0 15px #ff80d5; 
 }
 #msg { 
-  font-size: 25px; /* Adjusted smaller */
+  font-size: 25px; 
   color: #fff; 
   margin: 10px 0; 
 }
 #gifContainer img {
-  width: 200px; /* smaller sticker to fit frame */
+  width: 200px;
   border-radius: 20px;
   box-shadow: 0 0 20px rgba(255,255,255,0.6);
   transition: all 0.5s ease;
 }
 button {
-  padding: 15px 40px; /* smaller button to fit frame */
-  font-size: 20px; /* smaller font */
+  padding: 15px 40px;
+  font-size: 20px;
   border: none;
   border-radius: 50px;
   margin: 10px;
   cursor: pointer;
   position: absolute;
   box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
 }
 #loveBtn { background: #ff1493; color: white; z-index: 10; }
-#hateBtn, #bklBtn { background: #333; color: white; z-index: 9; }
+#hateBtn { background: #333; color: white; z-index: 9; }
 @keyframes growBig { 0% { transform: scale(1); } 100% { transform: scale(1.5); } }
 @keyframes shrinkSmall { 0% { transform: scale(1); } 100% { transform: scale(0); opacity: 0; } }
 @keyframes fart { 0%{rotate(0deg);}25%{rotate(-15deg);}50%{rotate(15deg);}75%{rotate(-10deg);}100%{rotate(0deg);} }
@@ -54,8 +54,8 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
-  font-size: 40px; /* Adjusted overlay font */
-  background: rgba(255,20,147,0.8);
+  font-size: 40px;
+  background: rgba(255,20,147,0.9);
   padding: 20px 40px;
   border-radius: 30px;
   text-shadow: 0 0 15px #fff;
@@ -66,7 +66,7 @@ button {
 #frame {
   position: relative;
   width: 100%;
-  height: 400px; /* slightly smaller frame */
+  height: 400px;
   margin-top: 20px;
   border: 2px solid rgba(255,255,255,0.5);
   overflow: hidden;
@@ -98,41 +98,38 @@ footer a { color: #fff; font-weight: bold; text-decoration: none; }
 <div id="frame">
   <button id="loveBtn">I Love You ❤️</button>
   <button id="hateBtn">I Hate You 💔</button>
-  <button id="bklBtn">Tu BKL Hai 👺🚬</button>
 </div>
 
 <div id="instaOverlay">
-  Follow me on Instagram! <br> @chilgoja2.0
+  Follow me on Instagram! <br> @harsh._.9844
 </div>
 
 <footer>
-  Made by <a href="https://instagram.com/chilgoja2.0" target="_blank">@chilgoja2.0</a>
+  Made by <a href="https://instagram.com/harsh._.9844" target="_blank">@harsh._.9844</a>
 </footer>
 
 <script>
-const music=document.getElementById("bgMusic");
-const loveBtn=document.getElementById("loveBtn");
-const hateBtn=document.getElementById("hateBtn");
-const bklBtn=document.getElementById("bklBtn");
-const msg=document.getElementById("msg");
-const gifContainer=document.getElementById("gifContainer");
-const instaOverlay=document.getElementById("instaOverlay");
-const frame=document.getElementById("frame");
+const music = document.getElementById("bgMusic");
+const loveBtn = document.getElementById("loveBtn");
+const hateBtn = document.getElementById("hateBtn");
+const msg = document.getElementById("msg");
+const gifContainer = document.getElementById("gifContainer");
+const instaOverlay = document.getElementById("instaOverlay");
+const frame = document.getElementById("frame");
 
-const hateTexts=["Awww babu maan jao 🥺","Ufff baby please! 😘","Mujhe na rulayo yaar 😭","Mera dil tod doge kya 💔","Maan jaa meri jaan ❤️"];
-const hateGIFs=[
+const hateTexts = ["Awww babu maan jao 🥺","Ufff baby please! 😘","Mujhe na rulayo yaar 😭","Mera dil tod doge kya 💔","Maan jaa meri jaan ❤️"];
+const hateGIFs = [
 "https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
 "https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
 "https://media0.giphy.com/media/3FmUiYq9CD6R4RK94M/giphy.gif"
 ];
-const finalGIFs=[
+const loveGIFs = [
 "https://media1.giphy.com/media/a73hd7MRKmel50my8F/giphy.gif",
 "https://media4.giphy.com/media/DdJ9RsY88uBarMvVsb/giphy.gif"
 ];
 
-let hateClickCount=0;
-let bklClickCount=0;
-let lastHatePos={x:0,y:0};
+let hateClickCount = 0;
+let loveSize = 1; // initial scale
 
 // MUSIC autoplay 5s after load
 window.addEventListener("load",()=>{
@@ -148,57 +145,39 @@ window.addEventListener("load",()=>{
 });
 
 // RANDOM MOVE INSIDE FRAME
-function moveButtonRandom(btn,clickCount){
-  const maxX=frame.clientWidth-btn.offsetWidth;
-  const maxY=frame.clientHeight-btn.offsetHeight;
-  const x=Math.random()*maxX;
-  const y=Math.random()*maxY;
-  btn.style.left=`${x}px`;
-  btn.style.top=`${y}px`;
-  if(btn.id==="hateBtn") lastHatePos={x,y};
-  const newSize=Math.max(10,40-clickCount*4);
-  btn.style.padding=`${newSize}px ${newSize*2}px`;
-  btn.style.fontSize=`${20 - clickCount*1}px`;
-  btn.style.animation="fart 0.5s";
-  setTimeout(()=>{btn.style.animation="";},500);
+function moveButtonRandom(btn){
+  const maxX = frame.clientWidth - btn.offsetWidth;
+  const maxY = frame.clientHeight - btn.offsetHeight;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+  btn.style.left = `${x}px`;
+  btn.style.top = `${y}px`;
 }
 
-// HATE
-hateBtn.onclick=()=>{
+// HATE BUTTON CLICK
+hateBtn.onclick = ()=>{
   hateClickCount++;
-  moveButtonRandom(hateBtn,hateClickCount);
-  const randText=hateTexts[Math.floor(Math.random()*hateTexts.length)];
-  const randGIF=hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
-  msg.innerHTML=randText;
-  gifContainer.innerHTML=`<img src="${randGIF}">`;
+  // shrink and move
+  let shrinkScale = Math.max(0.3, 1 - hateClickCount*0.05);
+  hateBtn.style.transform = `scale(${shrinkScale})`;
+  moveButtonRandom(hateBtn);
+  // change sticker and msg
+  const randGIF = hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
+  const randMsg = hateTexts[Math.floor(Math.random()*hateTexts.length)];
+  gifContainer.innerHTML = `<img src="${randGIF}">`;
+  msg.innerHTML = randMsg;
+  // increase I Love You size
+  loveSize += 0.2;
+  loveBtn.style.transform = `scale(${loveSize})`;
 }
 
-// BKL
-bklBtn.onclick=()=>{
-  bklClickCount++;
-  moveButtonRandom(bklBtn,bklClickCount);
-  const randText=hateTexts[Math.floor(Math.random()*hateTexts.length)];
-  const randGIF=hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
-  msg.innerHTML=randText;
-  gifContainer.innerHTML=`<img src="${randGIF}">`;
+// LOVE BUTTON CLICK
+loveBtn.onclick = ()=>{
+  // if clicked directly
+  gifContainer.innerHTML = `<img src="${loveGIFs[Math.floor(Math.random()*loveGIFs.length)]}" style="width:100%; height:100%; border-radius:0;">`;
+  instaOverlay.style.display = "block";
+  msg.innerHTML = "Follow me on Instagram! @harsh._.9844";
 }
-
-// LOVE
-loveBtn.onclick=()=>{
-  loveBtn.style.left=`${lastHatePos.x}px`;
-  loveBtn.style.top=`${lastHatePos.y}px`;
-  loveBtn.style.animation="growBig 1.5s forwards";
-  msg.innerHTML="Awww you love me! 💕";
-  gifContainer.innerHTML=`<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" style="width:100%; height:100%; border-radius:0;">`;
-  instaOverlay.style.display="block";
-  setTimeout(()=>{ msg.innerHTML="I LOVE YOU FOREVER 💍💘"; },2000);
-}
-
-// AUTO MOVE HATE + BKL
-setInterval(()=>{
-  moveButtonRandom(hateBtn,hateClickCount);
-  moveButtonRandom(bklBtn,bklClickCount);
-},1500);
 
 </script>
 </body>
