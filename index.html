@@ -13,25 +13,9 @@
       overflow: hidden;
       min-height: 100vh;
     }
-
-    h1, p {
-      text-align: center;
-      color: #fff;
-    }
-
-    .container {
-      position: relative;
-      text-align: center;
-      padding: 50px 20px;
-      z-index: 2;
-    }
-
-    #msg {
-      font-size: 22px;
-      color: #fff;
-      margin: 20px 0;
-    }
-
+    h1, p { text-align: center; color: #fff; }
+    .container { text-align: center; padding: 50px 20px; z-index: 2; }
+    #msg { font-size: 22px; color: #fff; margin: 20px 0; }
     button {
       padding: 15px 40px;
       font-size: 20px;
@@ -42,63 +26,28 @@
       transition: all 0.4s ease;
       box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
     }
-
-    #loveBtn {
-      background: #ff1493;
-      color: white;
-    }
-    #loveBtn:hover {
-      transform: scale(1.1);
-      background: #ff69b4;
-    }
-
-    #hateBtn {
-      background: #333;
-      color: white;
-      position: absolute;
-    }
-    #hateBtn:hover {
-      background: #555;
-    }
-
-    .gif {
-      max-width: 250px;
-      margin: 20px auto;
-    }
-
+    #loveBtn { background: #ff1493; color: white; }
+    #hateBtn { background: #333; color: white; position: absolute; }
+    .gif { max-width: 250px; margin: 20px auto; }
     .heart {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       background: red;
       clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
       animation: float 6s infinite;
       opacity: 0.7;
     }
-
     @keyframes float {
       0% { transform: translateY(0) scale(1); opacity: 0.8; }
       100% { transform: translateY(-800px) scale(0.5); opacity: 0; }
     }
-
-    .fullscreen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #ff007f;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 50px;
-      color: white;
-      z-index: 999;
-      animation: boom 1s forwards;
+    @keyframes growBig {
+      0% { transform: scale(1); }
+      100% { transform: scale(10); opacity: 0; }
     }
-
-    @keyframes boom {
-      from { transform: scale(0); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    @keyframes shrinkSmall {
+      0% { transform: scale(1); }
+      100% { transform: scale(0); opacity: 0; }
     }
   </style>
 </head>
@@ -125,74 +74,68 @@
       heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
       document.body.appendChild(heart);
     }
-  </script>
 
-  <script>
-    // Music crossfade repeat
     const s1 = document.getElementById("song1");
     const s2 = document.getElementById("song2");
+    let musicStarted = false;
 
-    function startLoop(main, next) {
-      main.play();
-      main.onloadedmetadata = () => {
-        main.addEventListener('timeupdate', () => {
-          if (main.currentTime >= main.duration - 5) {
-            if (next.paused) {
-              next.currentTime = 0;
-              next.play();
-            }
+    function startMusic() {
+      if (musicStarted) return;
+      musicStarted = true;
+      s1.play();
+      s1.onloadedmetadata = () => {
+        s1.addEventListener('timeupdate', () => {
+          if (s1.currentTime >= s1.duration - 5 && s2.paused) {
+            s2.currentTime = 0; s2.play();
+          }
+        });
+      };
+      s2.onloadedmetadata = () => {
+        s2.addEventListener('timeupdate', () => {
+          if (s2.currentTime >= s2.duration - 5 && s1.paused) {
+            s1.currentTime = 0; s1.play();
           }
         });
       };
     }
 
-    startLoop(s1, s2);
-    startLoop(s2, s1);
-
-    // Buttons + GIF logic
     const loveBtn = document.getElementById("loveBtn");
     const hateBtn = document.getElementById("hateBtn");
     const msg = document.getElementById("msg");
     const gifContainer = document.getElementById("gifContainer");
 
     const loveGIFs = [
-      "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUycW4wdTVqYmc2NGJvdmx1ZmRnMmNieGdnNTd2eTEzaGplOWM4dHA0eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/42YlR8u9gV5Cw/giphy.gif",
-      "https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUyaDR1a2c2dHh6aHoweTd0a3luM2Z2YnY0Z244bm1yYnUzb2YwZDk2dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WP1Z0FfnuMuXqPvDlj/giphy.gif",
-      "https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyd2gyZGxpMXJyYW5ndDRrZnlqNXZ2Z3VpMDMyNHd4cTIyb2pnYWd2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3FmUiYq9CD6R4RK94M/giphy.gif",
-      "https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyNnp0MXh3ZjVtc2Vmbmh1cWFvZWxpbmNmMnZzM2lvbTh0ZGdqbGRubCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XweOsBl72PFcc/giphy.gif",
-      "https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyaGJtdzh1MmVydDBuMXpkenFpczJocTBncHIzNnU0bDJ6czdzazgybCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Lv2VhwHrt6ljhvZ6LF/giphy.gif"
+      "https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
+      "https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
+      "https://media0.giphy.com/media/3FmUiYq9CD6R4RK94M/giphy.gif"
     ];
 
     const finalGIFs = [
-      "https://media1.giphy.com/media/v1.Y2lkPTZjMDliOTUybWU1cWZ6cXhyYzNwc3AyOXpvOTB2Mng1eDl1NnY5bm9odWZ5cHBoNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/a73hd7MRKmel50my8F/giphy.gif",
-      "https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyNGpnbjJ0cjZpM3JwN25iN2F1azFoaHE3dWJkaTJxZzd3cWFnYTd2ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/DdJ9RsY88uBarMvVsb/giphy.gif"
+      "https://media1.giphy.com/media/a73hd7MRKmel50my8F/giphy.gif",
+      "https://media4.giphy.com/media/DdJ9RsY88uBarMvVsb/giphy.gif"
     ];
 
     let hateClickCount = 0;
 
     loveBtn.onclick = () => {
-      const randGIF = loveGIFs[Math.floor(Math.random() * loveGIFs.length)];
+      startMusic();
       msg.innerHTML = "Awww you love me! 💕";
-      gifContainer.innerHTML = `<img src="${randGIF}" width="250" />`;
-      loveBtn.style.transform = "scale(1.2)";
-      setTimeout(() => loveBtn.style.transform = "scale(1)", 500);
+      gifContainer.innerHTML = `<img src="${loveGIFs[Math.floor(Math.random()*loveGIFs.length)]}" width="250"/>`;
 
-      if (hateBtn.style.display !== "none") {
-        hateBtn.style.display = "none";
-      }
+      // Animate loveBtn big
+      loveBtn.style.animation = "growBig 2s forwards";
 
-      // Final boom effect
+      // Animate hateBtn small
+      hateBtn.style.animation = "shrinkSmall 2s forwards";
+
       setTimeout(() => {
-        let boomDiv = document.createElement("div");
-        boomDiv.classList.add("fullscreen");
-        boomDiv.innerHTML = "I LOVE YOU FOREVER 💍💘";
-        document.body.appendChild(boomDiv);
-        const finalGIF = finalGIFs[Math.floor(Math.random() * finalGIFs.length)];
-        gifContainer.innerHTML = `<img src="${finalGIF}" width="250" />`;
+        gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" width="250"/>`;
+        msg.innerHTML = "I LOVE YOU FOREVER 💍💘";
       }, 2000);
     };
 
     hateBtn.onclick = () => {
+      startMusic();
       hateClickCount++;
       hateBtn.style.top = Math.random() * 70 + "vh";
       hateBtn.style.left = Math.random() * 70 + "vw";
