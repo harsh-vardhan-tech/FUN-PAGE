@@ -33,8 +33,8 @@ h1 {
   transition: all 0.5s ease;
 }
 button {
-  padding: 15px 40px;
-  font-size: 20px;
+  padding: 20px 50px;
+  font-size: 22px;
   border: none;
   border-radius: 50px;
   margin: 10px;
@@ -45,8 +45,6 @@ button {
 }
 #loveBtn { background: #ff1493; color: white; z-index: 10; }
 #hateBtn { background: #333; color: white; z-index: 9; }
-@keyframes growBig { 0% { transform: scale(1); } 100% { transform: scale(1.5); } }
-@keyframes shrinkSmall { 0% { transform: scale(1); } 100% { transform: scale(0); opacity: 0; } }
 @keyframes fart { 0%{rotate(0deg);}25%{rotate(-15deg);}50%{rotate(15deg);}75%{rotate(-10deg);}100%{rotate(0deg);} }
 #instaOverlay {
   position: fixed;
@@ -129,7 +127,7 @@ const loveGIFs = [
 ];
 
 let hateClickCount = 0;
-let loveSize = 1; // initial scale
+let loveSize = 1;
 
 // MUSIC autoplay 5s after load
 window.addEventListener("load",()=>{
@@ -152,12 +150,14 @@ function moveButtonRandom(btn){
   const y = Math.random() * maxY;
   btn.style.left = `${x}px`;
   btn.style.top = `${y}px`;
+  btn.style.animation="fart 0.5s";
+  setTimeout(()=>{btn.style.animation="";},500);
 }
 
 // HATE BUTTON CLICK
 hateBtn.onclick = ()=>{
   hateClickCount++;
-  // shrink and move
+  // shrink slightly
   let shrinkScale = Math.max(0.3, 1 - hateClickCount*0.05);
   hateBtn.style.transform = `scale(${shrinkScale})`;
   moveButtonRandom(hateBtn);
@@ -173,7 +173,7 @@ hateBtn.onclick = ()=>{
 
 // LOVE BUTTON CLICK
 loveBtn.onclick = ()=>{
-  // if clicked directly
+  // direct click
   gifContainer.innerHTML = `<img src="${loveGIFs[Math.floor(Math.random()*loveGIFs.length)]}" style="width:100%; height:100%; border-radius:0;">`;
   instaOverlay.style.display = "block";
   msg.innerHTML = "Follow me on Instagram! @harsh._.9844";
