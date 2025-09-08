@@ -45,16 +45,38 @@
       cursor: pointer;
       transition: all 0.4s ease;
       box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+      position: relative;
     }
     #loveBtn { background: #ff1493; color: white; }
-    #hateBtn { background: #333; color: white; }
+    #hateBtn { background: #333; color: white; position: absolute; }
     @keyframes growBig {
       0% { transform: scale(1); }
-      100% { transform: scale(20); opacity: 0.8; }
+      100% { transform: scale(20); opacity: 0.9; }
     }
     @keyframes shrinkSmall {
       0% { transform: scale(1); }
       100% { transform: scale(0); opacity: 0; }
+    }
+    @keyframes fart {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-15deg); }
+      50% { transform: rotate(15deg); }
+      75% { transform: rotate(-10deg); }
+      100% { transform: rotate(0deg); }
+    }
+    #instaOverlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 50px;
+      background: rgba(255,20,147,0.8);
+      padding: 30px 50px;
+      border-radius: 30px;
+      text-shadow: 0 0 20px #fff;
+      display: none;
+      z-index: 999;
     }
     footer {
       position: fixed;
@@ -71,7 +93,7 @@
 <body>
 
   <!-- Background Music -->
-  <audio id="bgMusic" src="Pretty-Little-Baby.mp3" autoplay loop></audio>
+  <audio id="bgMusic" src="Pretty-Little-Baby.mp3" loop></audio>
 
   <h1>I Love You ❤️</h1>
   <p id="msg">Do you love me? 😘</p>
@@ -85,27 +107,23 @@
     <button id="hateBtn">I Hate You 💔</button>
   </div>
 
+  <div id="instaOverlay">
+    Follow me on Instagram! <br> @chilgoja2.0
+  </div>
+
   <footer>
     Made by <a href="https://instagram.com/chilgoja2.0" target="_blank">@chilgoja2.0</a>
   </footer>
 
   <script>
     const music = document.getElementById("bgMusic");
-    // Auto music attempt + backup button if blocked
-    window.addEventListener("load", () => {
-      music.play().catch(() => {
-        let btn = document.createElement("button");
-        btn.innerText = "▶️ Start Music";
-        btn.style="position:fixed;top:20px;right:20px;padding:10px 20px;font-size:18px;";
-        document.body.appendChild(btn);
-        btn.onclick = () => { music.play(); btn.remove(); };
-      });
-    });
+    setTimeout(() => { music.play().catch(()=>{}); }, 0);
 
     const loveBtn = document.getElementById("loveBtn");
     const hateBtn = document.getElementById("hateBtn");
     const msg = document.getElementById("msg");
     const gifContainer = document.getElementById("gifContainer");
+    const instaOverlay = document.getElementById("instaOverlay");
 
     const hateTexts = [
       "Awww babu maan jao na 🥺",
@@ -126,24 +144,54 @@
 
     let hateClickCount = 0;
 
+    // LOVE button effect
     loveBtn.onclick = () => {
-      msg.innerHTML = "Awww you love me! 💕";
-      gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" />`;
-      loveBtn.style.animation = "growBig 2s forwards";
+      // Full screen sticker
+      gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" style="width:100vw; height:100vh; border-radius:0;"/>`;
+      loveBtn.style.animation = "growBig 1.5s forwards";
       hateBtn.style.animation = "shrinkSmall 2s forwards";
+      msg.innerHTML = "Awww you love me! 💕";
+
+      // Show Instagram overlay
+      instaOverlay.style.display = "block";
+
       setTimeout(() => {
         msg.innerHTML = "I LOVE YOU FOREVER 💍💘";
       }, 2000);
     };
 
+    // HATE button chaos
     hateBtn.onclick = () => {
       hateClickCount++;
+      const x = Math.random() * (window.innerWidth - hateBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - hateBtn.offsetHeight);
+      hateBtn.style.left = `${x}px`;
+      hateBtn.style.top = `${y}px`;
+
+      // Shrink button gradually
+      let newSize = Math.max(10, 60 - hateClickCount*5);
+      hateBtn.style.padding = `${newSize}px ${newSize*2}px`;
+      hateBtn.style.fontSize = `${30 - hateClickCount*2}px`;
+
+      // Fart funny rotation
+      hateBtn.style.animation = "fart 0.5s";
+
+      // Random sticker & message
       const randText = hateTexts[Math.floor(Math.random()*hateTexts.length)];
       const randGIF = hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
       msg.innerHTML = randText;
       gifContainer.innerHTML = `<img src="${randGIF}" />`;
-      hateBtn.style.animation = "shrinkSmall 3s forwards";
+
+      setTimeout(()=>{ hateBtn.style.animation=""; }, 500);
     };
+
+    // Extra chaos: move hate button randomly every 1.5s
+    setInterval(()=>{
+      const x = Math.random() * (window.innerWidth - hateBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - hateBtn.offsetHeight);
+      hateBtn.style.left = `${x}px`;
+      hateBtn.style.top = `${y}px`;
+    }, 1500);
   </script>
 </body>
 </html>
