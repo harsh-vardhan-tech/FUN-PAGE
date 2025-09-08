@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>I Love You 💘</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&display=swap" rel="stylesheet" />
   <style>
@@ -12,10 +12,29 @@
       background: linear-gradient(135deg, #ff007f, #001f4d);
       overflow: hidden;
       min-height: 100vh;
+      position: relative;
     }
-    h1, p { text-align: center; color: #fff; }
-    .container { text-align: center; padding: 50px 20px; z-index: 2; }
-    #msg { font-size: 22px; color: #fff; margin: 20px 0; }
+    h1 {
+      text-align: center;
+      font-size: 60px;
+      color: #fff;
+      text-shadow: 0 0 15px #ff80d5;
+      animation: popIn 2s ease;
+    }
+    #bigText {
+      text-align: center;
+      font-size: 40px;
+      color: #fff;
+      margin-top: 20px;
+      animation: fadeIn 3s infinite alternate;
+    }
+    #msg {
+      font-size: 24px;
+      text-align: center;
+      color: #fff;
+      margin: 20px 0;
+    }
+    .container { text-align: center; padding: 20px; z-index: 2; }
     button {
       padding: 15px 40px;
       font-size: 20px;
@@ -28,18 +47,24 @@
     }
     #loveBtn { background: #ff1493; color: white; }
     #hateBtn { background: #333; color: white; position: absolute; }
-    .gif { max-width: 250px; margin: 20px auto; }
-    .heart {
+    #gifContainer { margin: 20px auto; }
+    .emoji {
       position: absolute;
-      width: 20px; height: 20px;
-      background: red;
-      clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
-      animation: float 6s infinite;
-      opacity: 0.7;
+      font-size: 30px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
     }
-    @keyframes float {
-      0% { transform: translateY(0) scale(1); opacity: 0.8; }
-      100% { transform: translateY(-800px) scale(0.5); opacity: 0; }
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 0.9; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0.6; }
+      to { opacity: 1; }
     }
     @keyframes growBig {
       0% { transform: scale(1); }
@@ -49,62 +74,69 @@
       0% { transform: scale(1); }
       100% { transform: scale(0); opacity: 0; }
     }
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      color: #fff;
+      text-shadow: 0 0 10px #ff80d5;
+    }
+    footer a { color: #fff; font-weight: bold; text-decoration: none; }
   </style>
 </head>
 <body>
 
   <!-- Background Music -->
-  <audio id="song1" src="https://cdn.bazeafrika.com/wp-content/uploads/2025/05/Connie-Francis---Pretty-Little-Baby-Bazeafrika.com.mp3"></audio>
-  <audio id="song2" src="https://cdn.bazeafrika.com/wp-content/uploads/2025/05/Connie-Francis---Pretty-Little-Baby-Bazeafrika.com.mp3"></audio>
+  <audio id="bgMusic" src="Pretty-Little-Baby.mp3" loop></audio>
 
   <div class="container">
     <h1>I Love You 💘</h1>
+    <div id="bigText">I Love You ❤️ • I Love You Too 💘</div>
     <p id="msg">Do you love me? 😘</p>
     <button id="loveBtn">I Love You ❤️</button>
     <button id="hateBtn">I Hate You 💔</button>
-    <div id="gifContainer" class="gif"></div>
+    <div id="gifContainer"></div>
   </div>
 
-  <!-- Floating Hearts -->
+  <footer>
+    Made by <a href="https://instagram.com/chilgoja2.0" target="_blank">@chilgoja2.0</a>
+  </footer>
+
   <script>
-    for (let i = 0; i < 40; i++) {
-      let heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
-      document.body.appendChild(heart);
-    }
-
-    const s1 = document.getElementById("song1");
-    const s2 = document.getElementById("song2");
-    let musicStarted = false;
-
+    // Start music after first click
     function startMusic() {
-      if (musicStarted) return;
-      musicStarted = true;
-      s1.play();
-      s1.onloadedmetadata = () => {
-        s1.addEventListener('timeupdate', () => {
-          if (s1.currentTime >= s1.duration - 5 && s2.paused) {
-            s2.currentTime = 0; s2.play();
-          }
-        });
-      };
-      s2.onloadedmetadata = () => {
-        s2.addEventListener('timeupdate', () => {
-          if (s2.currentTime >= s2.duration - 5 && s1.paused) {
-            s1.currentTime = 0; s1.play();
-          }
-        });
-      };
+      const music = document.getElementById("bgMusic");
+      music.play().catch(()=>{});
     }
+
+    // Floating emojis
+    const emojis = ["❤️","😘","💋","🥰","💞","😍"];
+    setInterval(() => {
+      let emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+      emoji.style.left = Math.random()*100 + "vw";
+      emoji.style.top = "100vh";
+      document.body.appendChild(emoji);
+      setTimeout(()=>emoji.remove(),6000);
+    }, 800);
 
     const loveBtn = document.getElementById("loveBtn");
     const hateBtn = document.getElementById("hateBtn");
     const msg = document.getElementById("msg");
     const gifContainer = document.getElementById("gifContainer");
 
-    const loveGIFs = [
+    const hateTexts = [
+      "Awww babu maan jao na 🥺",
+      "Ufff baby please! 😘",
+      "Mujhe na rulayo yaar 😭",
+      "Mera dil tod doge kya 💔",
+      "Maan jaa meri jaan ❤️"
+    ];
+
+    const hateGIFs = [
       "https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
       "https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
       "https://media0.giphy.com/media/3FmUiYq9CD6R4RK94M/giphy.gif"
@@ -120,16 +152,12 @@
     loveBtn.onclick = () => {
       startMusic();
       msg.innerHTML = "Awww you love me! 💕";
-      gifContainer.innerHTML = `<img src="${loveGIFs[Math.floor(Math.random()*loveGIFs.length)]}" width="250"/>`;
+      gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" width="250"/>`;
 
-      // Animate loveBtn big
       loveBtn.style.animation = "growBig 2s forwards";
-
-      // Animate hateBtn small
-      hateBtn.style.animation = "shrinkSmall 2s forwards";
+      hateBtn.style.animation = "shrinkSmall 3s forwards";
 
       setTimeout(() => {
-        gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" width="250"/>`;
         msg.innerHTML = "I LOVE YOU FOREVER 💍💘";
       }, 2000);
     };
@@ -137,12 +165,18 @@
     hateBtn.onclick = () => {
       startMusic();
       hateClickCount++;
-      hateBtn.style.top = Math.random() * 70 + "vh";
-      hateBtn.style.left = Math.random() * 70 + "vw";
-      hateBtn.style.transform = "scale(" + (1 - hateClickCount * 0.1) + ")";
+      const randText = hateTexts[Math.floor(Math.random()*hateTexts.length)];
+      const randGIF = hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
+      msg.innerHTML = randText;
+      gifContainer.innerHTML = `<img src="${randGIF}" width="250"/>`;
+
+      // Shrink hateBtn slowly
+      hateBtn.style.transform = `scale(${1 - hateClickCount*0.1})`;
       if (hateClickCount >= 7) {
-        hateBtn.style.display = "none";
+        hateBtn.style.animation = "shrinkSmall 2s forwards";
       }
+      // Grow loveBtn faster
+      loveBtn.style.transform = `scale(${1 + hateClickCount*0.3})`;
     };
   </script>
 </body>
