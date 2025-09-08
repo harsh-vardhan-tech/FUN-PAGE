@@ -13,62 +13,44 @@
       overflow: hidden;
       min-height: 100vh;
       position: relative;
+      text-align: center;
     }
     h1 {
-      text-align: center;
-      font-size: 60px;
+      font-size: 80px;
       color: #fff;
+      margin-top: 40px;
       text-shadow: 0 0 15px #ff80d5;
-      animation: popIn 2s ease;
-    }
-    #bigText {
-      text-align: center;
-      font-size: 40px;
-      color: #fff;
-      margin-top: 20px;
-      animation: fadeIn 3s infinite alternate;
     }
     #msg {
-      font-size: 24px;
-      text-align: center;
+      font-size: 35px;
       color: #fff;
       margin: 20px 0;
     }
-    .container { text-align: center; padding: 20px; z-index: 2; }
+    #gifContainer img {
+      width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.6);
+      animation: floatSticker 5s ease-in-out infinite;
+    }
+    @keyframes floatSticker {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
     button {
-      padding: 15px 40px;
-      font-size: 20px;
+      padding: 25px 60px;
+      font-size: 30px;
       border: none;
-      border-radius: 40px;
+      border-radius: 50px;
       margin: 15px;
       cursor: pointer;
       transition: all 0.4s ease;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
     }
     #loveBtn { background: #ff1493; color: white; }
-    #hateBtn { background: #333; color: white; position: absolute; }
-    #gifContainer { margin: 20px auto; }
-    .emoji {
-      position: absolute;
-      font-size: 30px;
-      animation: floatUp 6s linear infinite;
-      opacity: 0.8;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 0.9; }
-      100% { transform: translateY(-100vh); opacity: 0; }
-    }
-    @keyframes popIn {
-      from { transform: scale(0); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0.6; }
-      to { opacity: 1; }
-    }
+    #hateBtn { background: #333; color: white; }
     @keyframes growBig {
       0% { transform: scale(1); }
-      100% { transform: scale(10); opacity: 0; }
+      100% { transform: scale(20); opacity: 0.8; }
     }
     @keyframes shrinkSmall {
       0% { transform: scale(1); }
@@ -89,15 +71,18 @@
 <body>
 
   <!-- Background Music -->
-  <audio id="bgMusic" src="Pretty-Little-Baby.mp3" loop></audio>
+  <audio id="bgMusic" src="Pretty-Little-Baby.mp3" autoplay loop></audio>
 
-  <div class="container">
-    <h1>I Love You 💘</h1>
-    <div id="bigText">I Love You ❤️ • I Love You Too 💘</div>
-    <p id="msg">Do you love me? 😘</p>
+  <h1>I Love You ❤️</h1>
+  <p id="msg">Do you love me? 😘</p>
+
+  <div id="gifContainer">
+    <img src="https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif" />
+  </div>
+
+  <div style="margin-top:30px;">
     <button id="loveBtn">I Love You ❤️</button>
     <button id="hateBtn">I Hate You 💔</button>
-    <div id="gifContainer"></div>
   </div>
 
   <footer>
@@ -105,23 +90,17 @@
   </footer>
 
   <script>
-    // Start music after first click
-    function startMusic() {
-      const music = document.getElementById("bgMusic");
-      music.play().catch(()=>{});
-    }
-
-    // Floating emojis
-    const emojis = ["❤️","😘","💋","🥰","💞","😍"];
-    setInterval(() => {
-      let emoji = document.createElement("div");
-      emoji.classList.add("emoji");
-      emoji.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-      emoji.style.left = Math.random()*100 + "vw";
-      emoji.style.top = "100vh";
-      document.body.appendChild(emoji);
-      setTimeout(()=>emoji.remove(),6000);
-    }, 800);
+    const music = document.getElementById("bgMusic");
+    // Auto music attempt + backup button if blocked
+    window.addEventListener("load", () => {
+      music.play().catch(() => {
+        let btn = document.createElement("button");
+        btn.innerText = "▶️ Start Music";
+        btn.style="position:fixed;top:20px;right:20px;padding:10px 20px;font-size:18px;";
+        document.body.appendChild(btn);
+        btn.onclick = () => { music.play(); btn.remove(); };
+      });
+    });
 
     const loveBtn = document.getElementById("loveBtn");
     const hateBtn = document.getElementById("hateBtn");
@@ -135,13 +114,11 @@
       "Mera dil tod doge kya 💔",
       "Maan jaa meri jaan ❤️"
     ];
-
     const hateGIFs = [
       "https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
       "https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
       "https://media0.giphy.com/media/3FmUiYq9CD6R4RK94M/giphy.gif"
     ];
-
     const finalGIFs = [
       "https://media1.giphy.com/media/a73hd7MRKmel50my8F/giphy.gif",
       "https://media4.giphy.com/media/DdJ9RsY88uBarMvVsb/giphy.gif"
@@ -150,33 +127,22 @@
     let hateClickCount = 0;
 
     loveBtn.onclick = () => {
-      startMusic();
       msg.innerHTML = "Awww you love me! 💕";
-      gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" width="250"/>`;
-
+      gifContainer.innerHTML = `<img src="${finalGIFs[Math.floor(Math.random()*finalGIFs.length)]}" />`;
       loveBtn.style.animation = "growBig 2s forwards";
-      hateBtn.style.animation = "shrinkSmall 3s forwards";
-
+      hateBtn.style.animation = "shrinkSmall 2s forwards";
       setTimeout(() => {
         msg.innerHTML = "I LOVE YOU FOREVER 💍💘";
       }, 2000);
     };
 
     hateBtn.onclick = () => {
-      startMusic();
       hateClickCount++;
       const randText = hateTexts[Math.floor(Math.random()*hateTexts.length)];
       const randGIF = hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
       msg.innerHTML = randText;
-      gifContainer.innerHTML = `<img src="${randGIF}" width="250"/>`;
-
-      // Shrink hateBtn slowly
-      hateBtn.style.transform = `scale(${1 - hateClickCount*0.1})`;
-      if (hateClickCount >= 7) {
-        hateBtn.style.animation = "shrinkSmall 2s forwards";
-      }
-      // Grow loveBtn faster
-      loveBtn.style.transform = `scale(${1 + hateClickCount*0.3})`;
+      gifContainer.innerHTML = `<img src="${randGIF}" />`;
+      hateBtn.style.animation = "shrinkSmall 3s forwards";
     };
   </script>
 </body>
