@@ -42,8 +42,20 @@ button {
   box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
   transition: all 0.3s ease;
 }
-#loveBtn { background: #ff1493; color: white; z-index: 10; }
-#hateBtn { background: #333; color: white; z-index: 9; }
+#loveBtn { 
+  background: #ff1493; 
+  color: white; 
+  z-index: 10; 
+  top: 150px; 
+  left: 20%; /* starting position */
+}
+#hateBtn { 
+  background: #333; 
+  color: white; 
+  z-index: 9; 
+  top: 150px; 
+  right: 20%; /* starting position */
+}
 @keyframes fart { 
   0%{transform:rotate(0deg);}25%{transform:rotate(-15deg);}50%{transform:rotate(15deg);}
   75%{transform:rotate(-10deg);}100%{transform:rotate(0deg);} 
@@ -127,13 +139,13 @@ const hateTexts = [
   "Dekha chase kar raha hu 😎"
 ];
 const hateGIFs = [
-"https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
-"https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
-"https://media0.giphy.com/media/3FmUiYq9CD6R4RK94M/giphy.gif"
+  "https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
+  "https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
+  "https://media0.giphy.com/media/3FmUiYq9CD6R4RK94M/giphy.gif"
 ];
 const loveGIFs = [
-"https://media1.giphy.com/media/a73hd7MRKmel50my8F/giphy.gif",
-"https://media4.giphy.com/media/DdJ9RsY88uBarMvVsb/giphy.gif"
+  "https://media1.giphy.com/media/a73hd7MRKmel50my8F/giphy.gif",
+  "https://media4.giphy.com/media/DdJ9RsY88uBarMvVsb/giphy.gif"
 ];
 
 let hateClickCount = 0;
