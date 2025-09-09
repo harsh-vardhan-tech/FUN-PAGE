@@ -44,7 +44,10 @@ button {
 }
 #loveBtn { background: #ff1493; color: white; z-index: 10; }
 #hateBtn { background: #333; color: white; z-index: 9; }
-@keyframes fart { 0%{rotate(0deg);}25%{rotate(-15deg);}50%{rotate(15deg);}75%{rotate(-10deg);}100%{rotate(0deg);} }
+@keyframes fart { 
+  0%{transform:rotate(0deg);}25%{transform:rotate(-15deg);}50%{transform:rotate(15deg);}
+  75%{transform:rotate(-10deg);}100%{transform:rotate(0deg);} 
+}
 #instaOverlay {
   position: fixed;
   top: 50%;
@@ -114,7 +117,15 @@ const gifContainer = document.getElementById("gifContainer");
 const instaOverlay = document.getElementById("instaOverlay");
 const frame = document.getElementById("frame");
 
-const hateTexts = ["Awww babu maan jao 🥺","Ufff baby please! 😘","Mujhe na rulayo yaar 😭","Mera dil tod doge kya 💔","Maan jaa meri jaan ❤️"];
+const hateTexts = [
+  "Awww babu maan jao 🥺",
+  "Ufff baby please! 😘",
+  "Mujhe na rulayo yaar 😭",
+  "Mera dil tod doge kya 💔",
+  "Maan jaa meri jaan ❤️",
+  "Love se bach nahi sakte 😏",
+  "Dekha chase kar raha hu 😎"
+];
 const hateGIFs = [
 "https://media3.giphy.com/media/42YlR8u9gV5Cw/giphy.gif",
 "https://media1.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif",
@@ -156,20 +167,26 @@ function moveButtonRandom(btn){
 // HATE button click
 hateBtn.onclick = ()=>{
   hateClickCount++;
+  
   // shrink button gradually
-  let shrinkScale = Math.max(0, 1 - hateClickCount*0.1);
+  let shrinkScale = Math.max(0.1, 1 - hateClickCount*0.1);
   hateBtn.style.transform = `scale(${shrinkScale})`;
+  
+  // move hate button randomly
   moveButtonRandom(hateBtn);
+  
   // change sticker and msg
   const randGIF = hateGIFs[Math.floor(Math.random()*hateGIFs.length)];
   const randMsg = hateTexts[Math.floor(Math.random()*hateTexts.length)];
   gifContainer.innerHTML = `<img src="${randGIF}">`;
   msg.innerHTML = randMsg;
+  
   // increase I Love You button
   loveSize += 0.2;
   loveBtn.style.transform = `scale(${loveSize})`;
+  
   // fade out I Hate You if too small
-  if(shrinkScale <= 0.1){
+  if(shrinkScale <= 0.15){
     hateBtn.style.display="none";
   }
 }
@@ -180,7 +197,6 @@ loveBtn.onclick = ()=>{
   instaOverlay.style.display = "block";
   msg.innerHTML = "Follow me on Instagram! @harsh._.9844";
 }
-
 </script>
 </body>
 </html>
